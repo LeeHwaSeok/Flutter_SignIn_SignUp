@@ -1,7 +1,9 @@
 import 'package:firest_dongjun/common/component/custom_text_form_field.dart';
+import 'package:firest_dongjun/common/view/splash_screen.dart';
 import 'package:firest_dongjun/user/view/login_screen.dart';
 import 'package:flutter/material.dart';
-/* 
+
+/*
 * runApp에 _App으로 함수를 실행 할 때, 반환 값은 MaterialApp으로 해줘야한다.
 * 이유는 Goroute를 사용할 때 BuildContext context를 사용해야할 수 있기 때문
 *
@@ -25,8 +27,7 @@ class _App extends StatelessWidget {
         fontFamily: 'NotoSans',
       ),
       debugShowCheckedModeBanner: false,
-      home : LoginScreen(),
-
+      home: SpalshScreen(),
     );
   }
 }
