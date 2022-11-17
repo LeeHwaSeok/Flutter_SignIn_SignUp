@@ -17,15 +17,26 @@ class _SpalshScreenState extends State<SpalshScreen> {
   void initState() {
     super.initState();
 
+    // DeleteToken();
     CheckToken();
 
     //여기선 await 불가능
   }
 
+  void DeleteToken() async {
+    // 저장소 초기화
+    await storage.deleteAll();
+  }
+
+  /*
+   * CheckToken으로 현재 로그인이 되었는지 안되었는지 확인하느 ㄴ기능
+   * */
   void CheckToken() async {
+    // write로 저장했던 데이터를 불러옵니다.
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
+    // 데이터가 둘다 비어있다면 ? Login : Root으로
     if (refreshToken == null || accessToken == null) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
