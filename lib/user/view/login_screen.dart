@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:firest_dongjun/common/component/custom_text_form_field.dart';
 import 'package:firest_dongjun/common/const/colors.dart';
@@ -26,14 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = '';
   @override
   Widget build(BuildContext context) {
+    //디오 패키지 불러옴
     final dio = Dio();
-
-    //에뮬레이터는 네트워크가 다르다 '10.0.2.2' == local host 127.0.0.1
-    final emulatorIp = '10.0.2.2:3000';
-    final simulatorIp = '127.0.0.1:3000';
-
-    // runtime에 디바이스를 체크하게 해준다. Platform
-    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
 
     return DefaultLayout(
         //화면을 스크롤할 수 있게 만들어버림
@@ -73,20 +66,23 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () async {
                     // ID:비밀번호
                     final rawString = '$username:$password';
-                    print(rawString);
+                    print('rawString === $rawString');
 
                     //base64로 인코딩 *외우기
                     Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
                     // ID:비밀번호를 base64로 인코딩 후, token으로 반환
                     String token = stringToBase64.encode(rawString);
+                    print('token === $token');
 
+                    //실행 안됨
                     final resp = await dio.post('http://$ip/auth/login',
                         options: Options(
                           headers: {
-                            'authorization': 'Basic $token',
+                            'Authorization': 'Basic $token',
                           },
                         ));
+                    print(resp.data);
 
                     final refreshToekn = resp.data['refreshToken'];
                     final accessToken = resp.data['accessToken'];
@@ -107,18 +103,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: PRIMARY_COLOR,
                   ),
                   child: Text('로그인')),
+              //회원 가입 진행 중
               TextButton(
                   onPressed: () async {
-                    final refreshToken =
-                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTY2ODU4MDg0NSwiZXhwIjoxNjY4NjY3MjQ1fQ._64vu9IT0KtaP0bYu_Ky-iU1PeSU8EAA84uFwS01hhU';
-                    final resp = await dio.post('http://$ip/auth/token',
-                        options: Options(
-                          headers: {
-                            'authorization': 'Bearer $refreshToken',
-                          },
-                        ));
 
-                    print(resp.data);
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,

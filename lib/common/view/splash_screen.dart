@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:firest_dongjun/common/const/colors.dart';
 import 'package:firest_dongjun/common/const/data.dart';
 import 'package:firest_dongjun/common/layout/default_layout.dart';
@@ -29,24 +30,30 @@ class _SpalshScreenState extends State<SpalshScreen> {
   }
 
   /*
-   * CheckToken으로 현재 로그인이 되었는지 안되었는지 확인하느 ㄴ기능
+   * CheckToken으로 현재 로그인이 되었는지 안되었는지 확인하는 기능
    * */
   void CheckToken() async {
-    // write로 저장했던 데이터를 불러옵니다.
+    // write로
     final refreshToken = await storage.read(key: REFRESH_TOKEN_KEY);
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    // 데이터가 둘다 비어있다면 ? Login : Root으로
-    if (refreshToken == null || accessToken == null) {
+    final dio = Dio();
+
+    try {
+      final resp = await dio.post('http://$ip/auth/token',
+          options: Options(
+            headers: {
+              'authorization': 'Bearer $refreshToken',
+            },
+          ));
+
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => RootTab()), (route) => false);
+    } catch (e) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => LoginScreen(),
-        ),
-        (route) => false,
-      );
-    } else {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => RootTab()), (route) => false);
+          MaterialPageRoute(
+            builder: (_) => LoginScreen(),
+          ),
+          (route) => false);
     }
   }
 

@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 /*
 * runApp에 _App으로 함수를 실행 할 때, 반환 값은 MaterialApp으로 해줘야한다.
-* 이유는 Goroute를 사용할 때 BuildContext context를 사용해야할 수 있기 때문
+* 이유는 GoRoute를 사용할 때 BuildContext context를 사용해야할 수 있기 때문
 *
 * 중요하게 배워야할 것
 * 1. 로그인이 어떻게 구성이 되는지
-* Access token과 refresh token을 발급받아 사용 / 대부분 이렇게 사용
+* Access token과 Refresh token을 발급받아 사용 / 대부분 이렇게 사용
 * */
 void main() {
   runApp(
