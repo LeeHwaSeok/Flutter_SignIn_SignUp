@@ -1,4 +1,5 @@
 import 'package:firest_dongjun/common/const/colors.dart';
+import 'package:firest_dongjun/restaurant/model/rastaurant_model.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -9,69 +10,95 @@ class RestaurantCard extends StatelessWidget {
   //레스토랑 태그
   final List<String> tags;
   //평점 갯수
-  final int ratingCount;
+  final int ratingsCount;
   // 배송 시간
   final int deliveryTime;
   //배송 비용
   final int deliveryFee;
   //배송 비용
-  final double rating;
+  final double ratings;
+  //상세 카드 여부
+  final bool isDetail;
+  //상세 내용
+  final String? detail;
 
   const RestaurantCard(
       {required this.image,
       required this.name,
       required this.tags,
-      required this.ratingCount,
+      required this.ratingsCount,
       required this.deliveryTime,
       required this.deliveryFee,
-      required this.rating,
+      required this.ratings,
+      this.isDetail = false,
+      this.detail,
       Key? key})
       : super(key: key);
+
+  // factory construct
+  factory RestaurantCard.fromModel({
+    required RestaurantModel model,
+    bool isDetail = false,
+  }) {
+    return RestaurantCard(
+      image: Image.network(model.thumbUrl, fit: BoxFit.cover),
+      name: model.name,
+      tags: model.tags,
+      ratingsCount: model.ratingsCount,
+      ratings: model.ratings,
+      deliveryFee: model.deliveryFee,
+      deliveryTime: model.deliveryTime,
+      isDetail: isDetail,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        //특정 위젯을 깍아줌
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: image,
-        ),
+        if (isDetail) image,
+        if (!isDetail)
+          //특정 위젯을 깍아줌
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12.0),
+            child: image,
+          ),
         const SizedBox(
           height: 16.0,
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              name,
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            Text(
-              tags.join(' · '),
-              style: TextStyle(color: BODY_TEXT_COLOR, fontSize: 14.0),
-            ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            Row(
-              children: [
-                _IconText(icon: Icons.star, label: rating.toString()),
-                renderDot(),
-                _IconText(icon: Icons.receipt, label: ratingCount.toString()),
-                renderDot(),
-                _IconText(
-                    icon: Icons.timelapse_outlined, label: '$deliveryTime'),
-                renderDot(),
-                _IconText(
-                    icon: Icons.monetization_on,
-                    label: deliveryFee == 0 ? '무료' : deliveryFee.toString()),
-              ],
-            )
-          ],
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: isDetail ? 16.0 : 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                name,
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                tags.join(' · '),
+                style: TextStyle(color: BODY_TEXT_COLOR, fontSize: 14.0),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              Row(
+                children: [
+                  _IconText(icon: Icons.star, label: ratings.toString()),
+                  renderDot(),
+                  _IconText(icon: Icons.receipt, label: ratingsCount.toString()),
+                  renderDot(),
+                  _IconText(icon: Icons.timelapse_outlined, label: '$deliveryTime'),
+                  renderDot(),
+                  _IconText(icon: Icons.monetization_on, label: deliveryFee == 0 ? '무료' : deliveryFee.toString()),
+                ],
+              ),
+              if (detail != null && isDetail) Text(detail!),
+            ],
+          ),
         )
       ],
     );
@@ -91,8 +118,7 @@ class RestaurantCard extends StatelessWidget {
 class _IconText extends StatelessWidget {
   final IconData icon;
   final String label;
-  const _IconText({required this.icon, required this.label, Key? key})
-      : super(key: key);
+  const _IconText({required this.icon, required this.label, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

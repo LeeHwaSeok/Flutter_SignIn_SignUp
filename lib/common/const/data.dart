@@ -14,4 +14,5 @@ final simulatorIp = '192.168.0.77:3000';
 // runtime에 디바이스를 체크하게 해준다. Platform
 final ip = Platform.isIOS ? simulatorIp : emulatorIp;
 
+// 기기의 암호화된 저장소를 사용 / 외부에서 쉽게 접근이 힘듬(장점)
 final storage = FlutterSecureStorage();
