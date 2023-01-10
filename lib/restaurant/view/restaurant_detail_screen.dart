@@ -1,4 +1,5 @@
 import 'package:firest_dongjun/common/layout/default_layout.dart';
+import 'package:firest_dongjun/product/component/product_card.dart';
 import 'package:firest_dongjun/restaurant/Component/restaurant_card.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,10 @@ class RestaurantDetailScreen extends StatelessWidget {
             ratings: 4.75,
             isDetail: true,
             detail: "음 맛있따~",
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ProductCard(),
           )
         ],
       ),
