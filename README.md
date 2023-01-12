@@ -1,6 +1,7 @@
 # first_dongjun
 
 A new Flutter project.
+인프런 강의자료인 코드팩토리 : 중급 강의 실습내용을 정리했습니다.
 
 ## Getting Started
 
