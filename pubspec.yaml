@@ -40,6 +40,9 @@ dependencies:
   dio: ^4.0.6
   # 2중보안 장치 + 로그인 상태 유지
   flutter_secure_storage: ^6.0.0
+  # Json 변환 달콤하게
+  json_annotation: ^4.7.0
+
 
 
 dev_dependencies:
@@ -52,7 +55,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-
+  build_runner: ^2.0.0
+  json_serializable: ^6.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

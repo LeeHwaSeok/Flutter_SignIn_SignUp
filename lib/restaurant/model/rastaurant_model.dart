@@ -1,5 +1,8 @@
 // 상수값을 자료형의로 정리 = enum
 import 'package:firest_dongjun/common/const/data.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+// part 'restaurant_model.g.dart';
 
 enum RestaurantPriceRange {
   expensive,
@@ -8,6 +11,7 @@ enum RestaurantPriceRange {
 }
 
 // get으로 받은 데이터를 모델링하기 위해 선언
+@JsonSerializable()
 class RestaurantModel {
   final String id;
   final String name;
@@ -31,6 +35,7 @@ class RestaurantModel {
     required this.thumbUrl,
   });
 
+  //JsonSerializable을 사용하기위해서 일단 주석처리
   //fromJson이라는 이름으로 construct를 만들어준거임
   factory RestaurantModel.fromJson({
     //Map<String, dynamic>은  문자열 키를  동적  값과 매핑합니다. 키 는 항상 문자열 이고 값 은 모든 유형 이 될 수 있으므로 동적 으로 유지되어 더 안전합니다.

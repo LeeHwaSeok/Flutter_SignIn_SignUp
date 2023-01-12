@@ -1,5 +1,6 @@
 import 'package:firest_dongjun/common/const/colors.dart';
 import 'package:firest_dongjun/restaurant/model/rastaurant_model.dart';
+import 'package:firest_dongjun/restaurant/model/restaurant_detail_model.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -49,6 +50,9 @@ class RestaurantCard extends StatelessWidget {
       deliveryFee: model.deliveryFee,
       deliveryTime: model.deliveryTime,
       isDetail: isDetail,
+      /**
+       * 팩토리에서는 인스턴스 반환 값을 바꿀 수 있다고 했는데 이런식으로 데이터를 반환할 수 있다.*/
+      detail: model is RestaurantDetailModel ? model.detail : null,
     );
   }
 
@@ -96,10 +100,11 @@ class RestaurantCard extends StatelessWidget {
                   _IconText(icon: Icons.monetization_on, label: deliveryFee == 0 ? '무료' : deliveryFee.toString()),
                 ],
               ),
-              if (detail != null && isDetail) Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Text(detail!),
-              ),
+              if (detail != null && isDetail)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(detail!),
+                ),
             ],
           ),
         )
