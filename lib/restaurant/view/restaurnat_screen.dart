@@ -59,7 +59,7 @@ class RestaurantScreen extends StatelessWidget {
 
                       // fatory construct를 활용해서 선언부에서 데이터 파싱을 모두 끝낼 수 있다.
                       final pItem = RestaurantModel.fromJson(
-                        json: item,
+                        item,
                       );
                       // 카드 선택시 상세페이지 전환
                       return GestureDetector(
