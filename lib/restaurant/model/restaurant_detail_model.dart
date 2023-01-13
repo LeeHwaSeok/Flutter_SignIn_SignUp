@@ -33,37 +33,6 @@ class RestaurantDetailModel extends RestaurantModel {
   });
 
   factory RestaurantDetailModel.fromJson(Map<String, dynamic> json) => _$RestaurantDetailModelFromJson(json);
-
-  /**
-  /**
-   * 팩토리 함수는 클래스의 인스턴스를 만들때, 반환값을 다르게 만들 수 있다.
-   * 팩토리를 생성할때는 해당 클래스.팩토리명 형식으로 생성하면 되고, 반환값을 아래와같이 지정해서 출력할 수 있다.*/
-  factory RestaurantDetailModel.fromJson({
-    required Map<String, dynamic> json,
-  }) {
-    return RestaurantDetailModel(
-        id: json['id'],
-        name: json['name'],
-        deliveryFee: json['deliveryFee'],
-        deliveryTime: json['deliveryTime'],
-        priceRange: RestaurantPriceRange.values.firstWhere((element) => element.name == json['priceRange']),
-        ratings: json['ratings'],
-        ratingsCount: json['ratingsCount'],
-        tags: List<String>.from(json['tags']),
-        thumbUrl: 'http://${ip}${json['thumbUrl']}',
-        detail: json['detail'],
-        /** 01/12
-         * products는 api에서 받아온 리스트형식인데 아래와같이 [[ .map<상속함수> ((x) => 상속함수().toList()); ]]로 정리를 해주지 않으면
-         * App_Build 할 때, products의 구조를 <dynamic, dynamic>으로 결정하기 때문에, 아래와 같이 정리해주는게 좋습니다.*/
-        products: json['products']
-            .map<RestaurantProductModel>(
-              (x) => RestaurantProductModel.fromJson(
-                json: x,
-              ),
-            )
-            .toList());
-  }
-   */
 }
 
 // json 속 리스트는 이런식으로 하나하나 type을 지정해서 사용할 수도 있습니다.

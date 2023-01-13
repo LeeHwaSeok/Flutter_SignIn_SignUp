@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:firest_dongjun/common/const/data.dart';
+import 'package:firest_dongjun/common/dio/dio.dart';
 import 'package:firest_dongjun/common/layout/default_layout.dart';
 import 'package:firest_dongjun/product/component/product_card.dart';
 import 'package:firest_dongjun/restaurant/Component/restaurant_card.dart';
 import 'package:firest_dongjun/restaurant/model/restaurant_detail_model.dart';
+import 'package:firest_dongjun/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantDetailScreen extends StatelessWidget {
@@ -12,42 +14,49 @@ class RestaurantDetailScreen extends StatelessWidget {
 
   const RestaurantDetailScreen({required this.id, Key? key}) : super(key: key);
 
-  Future<Map<String, dynamic>> getRestaurantDetail() async {
+  //01/13 Future의 <형태>를 바꾼건 받아오는 데이터중에 레포지토리 데이터의 형태에 따라서 변환해줘야하는데
+  // 현재 레포지토리는 추상화 클래스라서 .g.dart의 클래스 유형을 따라서 변경해줘야함 /builder, snapshot 에서도 변경해줘야함
+  Future<RestaurantDetailModel> getRestaurantDetail() async {
     final dio = Dio();
 
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+    dio.interceptors.add(
+      CustomInterceptor(
+        storage: storage,
+      ),
+    );
 
-    final resp =
-        await dio.get('http://$ip/restaurant/$id', options: Options(headers: {'authorization': 'Bearer $accessToken'}));
+    //01/13 retrofit으로 통신
+    final repository = RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant');
 
-    return resp.data;
+    return repository.getRestaurantDetail(id: id);
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
         title: '불타는 떡볶이',
-        child: FutureBuilder<Map<String, dynamic>>(
+        child: FutureBuilder<RestaurantDetailModel>(
             future: getRestaurantDetail(),
-            builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+            builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(snapshot.error.toString()),
+                );
+              }
               if (!snapshot.hasData) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
               }
-
-              // 스냅샷 데이터를 item으로 받아옴
-              final item = RestaurantDetailModel.fromJson(snapshot.data!);
-
               return CustomScrollView(
                 slivers: [
                   renderTop(
-                    model: item,
+                    model: snapshot.data!,
                   ),
                   rednerLabel(),
                   renderProducts(
                     //팩토리로 생성된 데이터 출력
-                    products: item.products,
+                    products: snapshot.data!.products,
                   ),
                 ],
               );
