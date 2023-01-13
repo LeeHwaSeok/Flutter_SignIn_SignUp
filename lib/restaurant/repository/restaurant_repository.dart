@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart' hide Headers;
+import 'package:firest_dongjun/common/model/cursor_pagination_model.dart';
+import 'package:firest_dongjun/restaurant/model/rastaurant_model.dart';
 import 'package:firest_dongjun/restaurant/model/restaurant_detail_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -16,8 +18,11 @@ abstract class RestaurantRepository {
   factory RestaurantRepository(Dio dio, {String baseUrl}) = _RestaurantRepository;
 
   // http://$ip/restaurant/
-  // @GET('/')
-  // paginate();
+  @GET('/')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<CursorPagination<RestaurantModel>> paginate();
 
   // http://$ip/restaurant/:id
   @GET('/{id}')
